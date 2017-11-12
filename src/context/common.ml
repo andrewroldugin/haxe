@@ -478,6 +478,7 @@ let short_platform_name = function
 	| Python -> "py"
 	| Hl -> "hl"
 	| Eval -> "evl"
+	| Cc -> "cc"
 
 let stats =
 	{
@@ -546,6 +547,13 @@ let get_config com =
 			pf_static = false;
 		}
 	| Cpp ->
+		{
+			default_config with
+			pf_capture_policy = CPWrapRef;
+			pf_pad_nulls = true;
+			pf_add_final_return = true;
+		}
+	| Cc ->
 		{
 			default_config with
 			pf_capture_policy = CPWrapRef;

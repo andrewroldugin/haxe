@@ -268,6 +268,9 @@ module Initialize = struct
 			| Eval ->
 				add_std "eval";
 				"eval"
+			| Cc ->
+				add_std "cc";
+				"cc"
 end
 
 let generate tctx ext xml_out interp swf_header =
@@ -319,6 +322,8 @@ let generate tctx ext xml_out interp swf_header =
 			Genhl.generate,"hl"
 		| Eval ->
 			(fun _ -> MacroContext.interpret tctx),"eval"
+		| Cc ->
+			Gencc.generate, "cc"
 		| Cross ->
 			assert false
 		in
@@ -414,7 +419,7 @@ let rec process_params create pl =
 
 and init ctx =
 	let usage = Printf.sprintf
-		"Haxe Compiler %s - (C)2005-2017 Haxe Foundation\n Usage : haxe%s -main <class> [-swf|-js|-neko|-php|-cpp|-cppia|-as3|-cs|-java|-python|-hl|-lua] <output> [options]\n Options :"
+		"Haxe Compiler %s - (C)2005-2017 Haxe Foundation\n Usage : haxe%s -main <class> [-swf|-js|-neko|-php|-cpp|-cppia|-as3|-cs|-java|-python|-hl|-lua|-cc] <output> [options]\n Options :"
 		s_version (if Sys.os_type = "Win32" then ".exe" else "")
 	in
 	let com = ctx.com in
@@ -493,6 +498,9 @@ try
 		("-hl",Arg.String (fun file ->
 			Initialize.set_platform com Hl file;
 		),"<file> : compile HL code as target file");
+		("-cc",Arg.String (fun dir ->
+			Initialize.set_platform com Cc dir;
+		),"<directory> : generate C++ code into target directory");
 		("-xml",Arg.String (fun file ->
 			Parser.use_doc := true;
 			xml_out := Some file
