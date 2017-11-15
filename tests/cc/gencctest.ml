@@ -17,7 +17,17 @@ let fixture_dir = "data/"
 
 let fixture file = read_file (fixture_dir ^ file)
 
+let test_guard_empty_package () =
+	let actual = guard ([], "Type") in
+	streq "TYPE" actual
+
+let test_guard () =
+	let actual = guard (["path"; "to"], "Type") in
+	streq "PATH_TO_TYPE" actual
+
 let test_fixture = "Gen" >::: [
+	"guard_empty_package" >:: test_guard_empty_package;
+	"guard" >:: test_guard;
 ]
 
 (* Tests *)
