@@ -70,10 +70,22 @@ class TestPreprocessor:
       return restore_funs
     return line
 
+  def GenTestSuiteCode(self):
+    code = '\nlet suite = "Suite" >::: [\n'
+    for name in self.functions:
+      if name.startswith('test'):
+        code += '\t"' + name + '" >:: ' + name + ';\n'
+    code += ']\n'
+    code += 'let _ = run_test_tt ~verbose:false suite'
+    return code
+
   def ProcessText(self, text):
     processed = ''
-    for line in text:
+    lines = text.splitlines(True)
+    for line in lines:
       processed += self.ProcessLine(line)
+    self.AddFunctions(text)
+    processed += self.GenTestSuiteCode()
     return processed
 
 if __name__ == '__main__':
@@ -86,7 +98,7 @@ if __name__ == '__main__':
     tests_file = sys.argv[2]
     output_file = sys.argv[3]
     pp.AddFunctions(open(funs_file).read())
-    processed_text = pp.ProcessText(open(tests_file).readlines())
+    processed_text = pp.ProcessText(open(tests_file).read())
     output_file_handle = open(output_file, 'w')
     output_file_handle.write(processed_text)
     output_file_handle.close()

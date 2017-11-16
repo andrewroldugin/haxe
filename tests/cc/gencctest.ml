@@ -35,13 +35,3 @@ let test_class_header () =
 	let actual = s_cl "" in
 	streq expected actual
 #teardown
-
-let test_fixture = "Gen" >::: [
-	"guard_empty_package" >:: test_guard_empty_package;
-	"guard" >:: test_guard;
-	"class_header" >:: test_class_header;
-]
-
-(* Tests *)
-
-let _ = run_test_tt ~verbose:false test_fixture

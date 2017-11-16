@@ -132,4 +132,10 @@ class TestPreprocessorTest(unittest.TestCase):
     line = 'regular_line'
     self.assertEquals(line, self.pp.ProcessLine(line))
 
+  def testGeneratesTestSuite(self):
+    tests = open('data/tests.ml').read()
+    expected = open('data/tests_suite.ml').read()
+    actual = self.pp.ProcessText(tests)
+    self.assertEquals(expected, actual)
+
 unittest.main()
