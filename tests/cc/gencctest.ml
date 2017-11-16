@@ -32,6 +32,16 @@ let test_guard () =
 #setup s_cl
 let test_class_header () =
 	let expected = fixture "class_header.dat" in
-	let actual = s_cl "" in
+	let actual = s_cl Type.null_class in
 	streq expected actual
 #teardown
+
+let test_guard_begin () =
+	let expected = fixture "guard_begin.dat" in
+	let actual = s_ce(guard_begin "GUARDID") in
+	streq expected actual
+
+let test_guard_end () =
+	let expected = fixture "guard_end.dat" in
+	let actual = s_ce(guard_end "GUARDID") in
+	streq expected actual
