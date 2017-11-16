@@ -25,9 +25,21 @@ let test_guard () =
 	let actual = guard (["path"; "to"], "Type") in
 	streq "PATH_TO_TYPE" actual
 
+#stub guard_begin Line "<guard_begin>"
+#stub guard_end Line "<guard_end>"
+#stub inc_deps Line "[<include_deps>]"
+#stub cl_decl Line "<class_decl>"
+#setup s_cl
+let test_class_header () =
+	let expected = fixture "class_header.dat" in
+	let actual = s_cl "" in
+	streq expected actual
+#teardown
+
 let test_fixture = "Gen" >::: [
 	"guard_empty_package" >:: test_guard_empty_package;
 	"guard" >:: test_guard;
+	"class_header" >:: test_class_header;
 ]
 
 (* Tests *)
