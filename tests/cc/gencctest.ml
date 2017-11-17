@@ -45,3 +45,15 @@ let test_guard_end () =
 	let expected = fixture "guard_end.dat" in
 	let actual = s_ce(guard_end "GUARDID") in
 	streq expected actual
+
+#stub s_cl_name "<class_name>"
+#stub s_cl_extends "[<base_classes>]"
+#stub cl_ctor Line "[<ctor>]"
+#stub cl_field Line "[<field>]"
+#setup cl_decl
+let test_class_decl () =
+	let expected = fixture "class_decl.dat" in
+	let c = Type.null_class in
+	let actual = s_ce (cl_decl c) in
+	streq expected actual
+#teardown

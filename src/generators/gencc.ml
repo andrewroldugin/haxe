@@ -10,9 +10,13 @@ type code_element =
 				| CodeBlock of code_block
 and code_block = code_element list
 
-let rec s_ce = function
+let rec s_ce ce =
+	let rec s_cb cb = String.concat "" (List.map (fun x -> s_ce x) cb) in
+	match ce with
 	| Line s -> s ^ "\n"
-	| CodeBlock cb -> String.concat "" (List.map (fun x -> s_ce x) cb)
+	| Statement s -> s ^ ";\n"
+	| StatementBlock (s, cb) -> s ^ " {\n" ^ s_cb cb ^ "}\n"
+	| CodeBlock cb -> s_cb cb
 	| _ -> "unknown code"
 
 let guard type_path =
@@ -22,18 +26,29 @@ let guard type_path =
 		| package, type_name -> String.concat "_" package ^ "_" ^ type_name
 	)
 
-let guard_begin gid = 
+let guard_begin gid =
 	CodeBlock [Line ("#ifndef " ^ gid); Line ("#define " ^ gid)]
 let guard_end gid = Line ("#endif  // " ^ gid)
 let inc_deps aoeu = NewLine
-let cl_decl aeou = NewLine
+let s_cl_name a = ""
+let s_cl_extends a = ""
+let cl_field = NewLine
+let cl_ctor opt = NewLine
+let cl_decl cl = CodeBlock [
+	StatementBlock (
+	"class " ^ (s_cl_name cl.cl_path) ^ (s_cl_extends cl), [
+		cl_ctor cl.cl_constructor;
+		cl_field;
+	]);
+	Statement "";
+]
 
 let cl_header cl =
 	let gid = guard cl.cl_path in
 	CodeBlock [
 		guard_begin gid;
 		inc_deps "";
-		cl_decl "";
+		cl_decl cl;
 		guard_end gid;
 	]
 
