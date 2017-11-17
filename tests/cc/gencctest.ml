@@ -57,3 +57,8 @@ let test_class_decl () =
 	let actual = s_ce (cl_decl c) in
 	streq expected actual
 #teardown
+
+let test_cl_fwd () =
+	let expected = fixture "class_fwd.dat" in
+	let actual = s_ce (cl_fwd (["path"; "to"], "Type")) in
+	streq expected actual

@@ -52,6 +52,8 @@ let cl_header cl =
 		guard_end gid;
 	]
 
+let cl_fwd (p, t) = List.fold_right (fun x ce -> StatementBlock ("namespace " ^ x, [ce])) p (Statement ("class " ^ t))
+
 let generate ctx =
 	(* List.iter (fun mtype -> generate_module_type mtype ctx.file) ctx.types; *)
 	print_endline("Generating cc");

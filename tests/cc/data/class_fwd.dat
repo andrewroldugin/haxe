@@ -1,0 +1,5 @@
+namespace path {
+namespace to {
+class Type;
+}
+}
