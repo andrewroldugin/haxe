@@ -28,12 +28,14 @@ let guard_end gid = Line ("#endif  // " ^ gid)
 let inc_deps aoeu = NewLine
 let cl_decl aeou = NewLine
 
-let s_cl cl =
+let cl_header cl =
 	let gid = guard cl.cl_path in
-	(s_ce (guard_begin gid)) ^
-	(s_ce (inc_deps "")) ^
-	(s_ce (cl_decl "")) ^
-	(s_ce (guard_end gid))
+	CodeBlock [
+		guard_begin gid;
+		inc_deps "";
+		cl_decl "";
+		guard_end gid;
+	]
 
 let generate ctx =
 	(* List.iter (fun mtype -> generate_module_type mtype ctx.file) ctx.types; *)

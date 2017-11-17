@@ -29,10 +29,10 @@ let test_guard () =
 #stub guard_end Line "<guard_end>"
 #stub inc_deps Line "[<include_deps>]"
 #stub cl_decl Line "<class_decl>"
-#setup s_cl
+#setup cl_header
 let test_class_header () =
 	let expected = fixture "class_header.dat" in
-	let actual = s_cl Type.null_class in
+	let actual = s_ce (cl_header Type.null_class) in
 	streq expected actual
 #teardown
 
