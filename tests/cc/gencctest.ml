@@ -49,7 +49,7 @@ let test_guard_end () =
 #stub s_cl_name "<class_name>"
 #stub s_cl_extends "[<base_classes>]"
 #stub cl_ctor L "[<ctor>]"
-#stub cl_field L (if static then "[<static>]" else "[<field>]")
+#stub cl_field L (if s then "[<static>]" else "[<field>]")
 #setup cl_fields
 #setup cl_decl
 let test_class_decl () =
@@ -62,6 +62,31 @@ let test_class_decl () =
 	streq expected actual
 #teardown
 #setup cl_fields
+
+#stub s_access "<access>"
+#stub s_static "[static ]"
+#stub s_t "<type>"
+#stub s_params "[<params>]"
+#setup cl_field
+let test_cl_field () =
+	let expected = fixture "class_field_decl.txt" in
+	(*let field = Type.mk_field "field_name" Type.t_dynamic Globals.null_pos in*)
+	let f = Type.null_field in
+	f.cf_name <- "field";
+	let actual = s_ce (cl_field f true) in
+	streq expected actual
+#teardown
+
+let test_access () =
+	streq "public:" (s_access true);
+	streq "protected:" (s_access false)
+
+let test_static () =
+	streq "static " (s_static true);
+	streq "" (s_static false)
+
+let test_params () =
+	streq "()" (s_params [])
 
 let test_cl_fwd () =
 	let expected = fixture "class_fwd.dat" in

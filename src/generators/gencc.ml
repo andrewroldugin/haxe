@@ -27,8 +27,14 @@ let guard_begin gid =
 let guard_end gid = L ("#endif  // " ^ gid)
 let inc_deps aoeu = NL
 let s_cl_name path = s_path path "::"
+let s_t t = ""
+let s_access public = if public then "public:" else "protected:"
+let s_static s = if s then "static " else ""
+let s_params params = "()"
 let s_cl_extends a = ""
-let cl_field f static = NL
+let cl_field f s =
+	S (s_access f.cf_public ^ " " ^ s_static s ^ s_t f.cf_type ^ " " ^ f.cf_name ^
+		s_params f.cf_params)
 let cl_ctor opt = NL
 let cl_fields fs static = CB (List.map (fun f -> cl_field f static) fs)
 let cl_decl cl = CB [
