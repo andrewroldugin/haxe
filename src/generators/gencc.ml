@@ -10,13 +10,13 @@ type code_element =
 				| CB of code_block           (* Code Block *)
 and code_block = code_element list
 
-let rec s_ce ce =
-	let rec s_cb cb = String.concat "" (List.map (fun x -> s_ce x) cb) in
+let rec s_ce ?(i = "") ce =
+	let rec s_cb cb i = String.concat "" (List.map (fun x -> s_ce x ~i:i) cb) in
 	match ce with
-	| L s -> s ^ "\n"
-	| S s -> s ^ ";\n"
-	| SB (s, cb) -> s ^ " {\n" ^ s_cb cb ^ "}\n"
-	| CB cb -> s_cb cb
+	| L s -> i ^ s ^ "\n"
+	| S s -> i ^ s ^ ";\n"
+	| SB (s, cb) -> i ^ s ^ " {\n" ^ s_cb cb (i ^ "\t") ^ i ^ "}\n"
+	| CB cb -> s_cb cb i
 	| _ -> "unknown code"
 
 let s_path (p, t) delim = String.concat delim (p@[t])
