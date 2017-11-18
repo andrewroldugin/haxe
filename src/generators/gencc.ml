@@ -19,18 +19,13 @@ let rec s_ce ce =
 	| CB cb -> s_cb cb
 	| _ -> "unknown code"
 
-let guard type_path =
-	String.uppercase_ascii
-	(match type_path with
-		| [], type_name -> type_name
-		| package, type_name -> String.concat "_" package ^ "_" ^ type_name
-	)
+let s_path (p, t) delim = String.concat delim (p@[t])
+let guard type_path = String.uppercase_ascii (s_path type_path "_")
 
 let guard_begin gid =
 	CB [L ("#ifndef " ^ gid); L ("#define " ^ gid)]
 let guard_end gid = L ("#endif  // " ^ gid)
 let inc_deps aoeu = NL
-let s_path (p, t) delim = String.concat delim (p@[t])
 let s_cl_name path = s_path path "::"
 let s_cl_extends a = ""
 let cl_field = NL
