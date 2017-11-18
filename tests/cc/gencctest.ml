@@ -62,3 +62,7 @@ let test_cl_fwd () =
 	let expected = fixture "class_fwd.dat" in
 	let actual = s_ce (cl_fwd (["path"; "to"], "Type")) in
 	streq expected actual
+
+let test_cl_name () =
+	streq "Type" (s_cl_name ([], "Type"));
+	streq "path::to::Type" (s_cl_name (["path"; "to"], "Type"))

@@ -30,7 +30,8 @@ let guard_begin gid =
 	CB [L ("#ifndef " ^ gid); L ("#define " ^ gid)]
 let guard_end gid = L ("#endif  // " ^ gid)
 let inc_deps aoeu = NL
-let s_cl_name a = ""
+let s_path (p, t) delim = String.concat delim (p@[t])
+let s_cl_name path = s_path path "::"
 let s_cl_extends a = ""
 let cl_field = NL
 let cl_ctor opt = NL
