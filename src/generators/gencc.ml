@@ -28,13 +28,15 @@ let guard_end gid = L ("#endif  // " ^ gid)
 let inc_deps aoeu = NL
 let s_cl_name path = s_path path "::"
 let s_cl_extends a = ""
-let cl_field = NL
+let cl_field f static = NL
 let cl_ctor opt = NL
+let cl_fields fs static = CB (List.map (fun f -> cl_field f static) fs)
 let cl_decl cl = CB [
 	SB (
 	"class " ^ (s_cl_name cl.cl_path) ^ (s_cl_extends cl), [
 		cl_ctor cl.cl_constructor;
-		cl_field;
+		cl_fields cl.cl_ordered_fields false;
+		cl_fields cl.cl_ordered_statics true;
 	]);
 	S "";
 ]

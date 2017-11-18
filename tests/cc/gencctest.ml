@@ -49,14 +49,19 @@ let test_guard_end () =
 #stub s_cl_name "<class_name>"
 #stub s_cl_extends "[<base_classes>]"
 #stub cl_ctor L "[<ctor>]"
-#stub cl_field L "[<field>]"
+#stub cl_field L (if static then "[<static>]" else "[<field>]")
+#setup cl_fields
 #setup cl_decl
 let test_class_decl () =
 	let expected = fixture "class_decl.dat" in
+	(*let c = Type.mk_class Type.null_module ([],"") Globals.null_pos in*)
 	let c = Type.null_class in
+	c.cl_ordered_fields <- [Type.null_field];
+	c.cl_ordered_statics <- [Type.null_field];
 	let actual = s_ce (cl_decl c) in
 	streq expected actual
 #teardown
+#setup cl_fields
 
 let test_cl_fwd () =
 	let expected = fixture "class_fwd.dat" in
