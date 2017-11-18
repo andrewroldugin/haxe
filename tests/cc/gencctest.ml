@@ -25,10 +25,10 @@ let test_guard () =
 	let actual = guard (["path"; "to"], "Type") in
 	streq "PATH_TO_TYPE" actual
 
-#stub guard_begin Line "<guard_begin>"
-#stub guard_end Line "<guard_end>"
-#stub inc_deps Line "[<include_deps>]"
-#stub cl_decl Line "<class_decl>"
+#stub guard_begin L "<guard_begin>"
+#stub guard_end L "<guard_end>"
+#stub inc_deps L "[<include_deps>]"
+#stub cl_decl L "<class_decl>"
 #setup cl_header
 let test_class_header () =
 	let expected = fixture "class_header.dat" in
@@ -48,8 +48,8 @@ let test_guard_end () =
 
 #stub s_cl_name "<class_name>"
 #stub s_cl_extends "[<base_classes>]"
-#stub cl_ctor Line "[<ctor>]"
-#stub cl_field Line "[<field>]"
+#stub cl_ctor L "[<ctor>]"
+#stub cl_field L "[<field>]"
 #setup cl_decl
 let test_class_decl () =
 	let expected = fixture "class_decl.dat" in
