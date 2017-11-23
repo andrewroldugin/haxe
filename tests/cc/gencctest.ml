@@ -96,3 +96,10 @@ let test_cl_fwd () =
 let test_cl_name () =
 	streq "Type" (s_cl_name ([], "Type"));
 	streq "path::to::Type" (s_cl_name (["path"; "to"], "Type"))
+
+#stub s_ptr_t "*"
+#stub s_t_name "Type"
+#setup s_t
+let test_s_t () =
+	streq "Type*" (s_t Type.t_dynamic)
+#teardown
