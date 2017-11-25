@@ -103,3 +103,26 @@ let test_cl_name () =
 let test_s_t () =
 	streq "Type*" (s_t Type.t_dynamic)
 #teardown
+
+let check_basic_t t_name expected =
+	let abst = Type.null_abstract in
+	abst.a_path <- ([], t_name);
+	streq expected (s_t (TAbstract(abst, [])))
+
+let test_tvoid () =
+	check_basic_t "Void" "Void"
+
+let test_tbool () =
+	check_basic_t "Bool" "Bool"
+
+let test_tint () =
+	check_basic_t "Int" "Int"
+
+let test_tfloat () =
+	check_basic_t "Float" "Float"
+
+let test_tsingle () =
+	check_basic_t "Single" "Single"
+
+let test_tdynamic () =
+	check_basic_t "Dynamic" "Dynamic*"

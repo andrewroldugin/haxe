@@ -27,8 +27,14 @@ let guard_begin gid =
 let guard_end gid = L ("#endif  // " ^ gid)
 let inc_deps aoeu = NL
 let s_cl_name path = s_path path "::"
-let s_t_name t = ""
-let s_ptr_t t = ""
+let t_path = function
+	| TAbstract({a_path = p},_) -> p
+	| _ -> ([], "")
+let s_t_name t = s_path (t_path t) "::"
+let is_ptr_t = function
+	| TAbstract({a_path = [], "Dynamic"},_) -> true
+	| _ -> false
+let s_ptr_t t = if (is_ptr_t t) then "*" else ""
 let s_t t = s_t_name t ^ s_ptr_t t
 let s_access public = if public then "public:" else "protected:"
 let s_static s = if s then "static " else ""
