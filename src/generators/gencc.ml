@@ -1,4 +1,5 @@
 open Type
+open ExtList
 
 type code_element =
 				| S of string                (* Statement *)
@@ -25,7 +26,7 @@ let guard type_path = String.uppercase_ascii (s_path type_path "_")
 let guard_begin gid =
 	CB [L ("#ifndef " ^ gid); L ("#define " ^ gid)]
 let guard_end gid = L ("#endif  // " ^ gid)
-let inc_deps aoeu = NL
+let inc_deps deps = CB (List.map (fun x -> L ("#include \"" ^ x ^ "\"")) deps)
 let s_cl_name path = s_path path "::"
 let t_path = function
 	| TAbstract({a_path = p},_) -> p
@@ -54,12 +55,42 @@ let cl_decl cl = CB [
 	]);
 	S "";
 ]
+let path_file p = s_path p "/"
+let t_file t = path_file (t_path t)
+let add_ext files ext = List.map (fun f -> f ^ ext) files
+let cl_decl_deps cl =
+	let direct_deps =
+		let fields_deps = List.filter_map
+		(fun f -> match f.cf_kind with
+			| Var _ when (not (is_ptr_t f.cf_type)) ->
+				Some (t_file f.cf_type)
+			| _ -> None
+		)
+			cl.cl_ordered_fields
+		in
+		let extends_deps = [] in
+		List.unique (extends_deps @ fields_deps)
+	in
+	let fwd_deps =
+		let fields_deps = List.flatten
+			(List.map
+				(fun f ->
+					(t_file f.cf_type)::(List.map (fun (_, pt) -> t_file pt) f.cf_params)
+				)
+				(cl.cl_ordered_fields @ cl.cl_ordered_statics)
+			)
+		in
+		let cl_fwd = path_file cl.cl_path in
+		let deps = List.unique (cl_fwd :: fields_deps) in
+		List.filter (fun x -> not (List.mem x direct_deps)) deps
+	in
+	List.sort (add_ext fwd_deps ".fwd.h" @ add_ext direct_deps ".h")
 
 let cl_header cl =
 	let gid = guard cl.cl_path in
 	CB [
 		guard_begin gid;
-		inc_deps "";
+		inc_deps (cl_decl_deps cl);
 		cl_decl cl;
 		guard_end gid;
 	]

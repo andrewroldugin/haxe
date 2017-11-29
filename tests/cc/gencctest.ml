@@ -126,3 +126,9 @@ let test_tsingle () =
 
 let test_tdynamic () =
 	check_basic_t "Dynamic" "Dynamic*"
+
+let test_includes () =
+	let expected = fixture "includes.txt" in
+	let files = ["path/to/file.h"; "other/path/to/other_file.h"] in
+	let actual = s_ce (inc_deps files) in
+	streq expected actual
